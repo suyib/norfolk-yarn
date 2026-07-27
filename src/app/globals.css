@@ -6,30 +6,54 @@
 
 :root {
 
-  /* Brand palette — from the brand sheet. Type scale still TBC; see PROGRESS.md. */
+  /* Brand palette — extracted from the Figma homepage export (node 8-92).
+     Supersedes the earlier brand-sheet guess; camel is kept from the brand
+     sheet since this screen didn't surface it. */
   --color-soft-white: #fcfcf8;
   --color-forest: #0f3b2f;
   --color-heather: #9e6675;
   --color-camel: #b89b5e;
 
+  /* Text tones */
+  --color-ink: #2b2b24; /* body copy, headings on light backgrounds */
+  --color-ink-muted: #4c4c40; /* secondary text, uppercase section labels */
+  --color-muted-warm: #7c7c6d; /* tertiary text, placeholders, struck-through price */
+
+  /* Surfaces / borders */
+  --color-cream: #faffec; /* announcement bar bg; light text on dark bg */
+  --color-mist: #edf3ef; /* card borders; text on forest-coloured buttons */
+  --color-sage: #cfe0d7; /* border on "shop by weight" cards */
+  --color-tan: #dad5c6; /* newsletter input border; muted text on dark bg */
+  --color-taupe: #abaa99; /* outline-button border */
+  --color-heather-foreground: #f6edef; /* text on heather-coloured buttons */
+
+  /* Status */
+  --color-sale: #b24a3c; /* SALE badge */
+
+  /* Fonts — "FreightBig Pro" (headings) and "Sofia Pro" (body/UI) are
+     commercial fonts, not bundled here. Falls back to system fonts until
+     licensed webfont files are added and wired via next/font/local. */
+  --font-sans: "Sofia Pro", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "FreightBig Pro", Georgia, "Times New Roman", serif;
+
   /* shadcn semantic tokens, wired to the brand palette above. */
   --background: var(--color-soft-white);
-  --foreground: var(--color-forest);
-  --card: var(--color-soft-white);
-  --card-foreground: var(--color-forest);
+  --foreground: var(--color-ink);
+  --card: white;
+  --card-foreground: var(--color-ink);
   --popover: var(--color-soft-white);
-  --popover-foreground: var(--color-forest);
+  --popover-foreground: var(--color-ink);
   --primary: var(--color-forest);
-  --primary-foreground: var(--color-soft-white);
-  --secondary: var(--color-camel);
-  --secondary-foreground: var(--color-forest);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: var(--color-heather);
-  --accent-foreground: var(--color-soft-white);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
+  --primary-foreground: var(--color-mist);
+  --secondary: var(--color-heather);
+  --secondary-foreground: var(--color-heather-foreground);
+  --muted: var(--color-mist);
+  --muted-foreground: var(--color-ink-muted);
+  --accent: var(--color-sage);
+  --accent-foreground: var(--color-ink);
+  --destructive: var(--color-sale);
+  --border: var(--color-mist);
+  --input: var(--color-tan);
   --ring: var(--color-forest);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
@@ -54,9 +78,19 @@
   --color-forest: var(--color-forest);
   --color-heather: var(--color-heather);
   --color-camel: var(--color-camel);
+  --color-ink: var(--color-ink);
+  --color-ink-muted: var(--color-ink-muted);
+  --color-muted-warm: var(--color-muted-warm);
+  --color-cream: var(--color-cream);
+  --color-mist: var(--color-mist);
+  --color-sage: var(--color-sage);
+  --color-tan: var(--color-tan);
+  --color-taupe: var(--color-taupe);
+  --color-heather-foreground: var(--color-heather-foreground);
+  --color-sale: var(--color-sale);
   --font-sans: var(--font-sans);
+  --font-heading: var(--font-heading);
   --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
