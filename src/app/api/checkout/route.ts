@@ -79,7 +79,8 @@ export async function POST(request: NextRequest) {
     .single();
 
   if (orderError || !order) {
-    return NextResponse.json({ error: "Could not create order" }, { status: 500 });
+    console.error("orders insert failed:", orderError);
+    return NextResponse.json({ error: "Could not create order", detail: orderError?.message }, { status: 500 });
   }
 
   const { error: itemsError } = await supabase.from("order_items").insert(
@@ -98,7 +99,8 @@ export async function POST(request: NextRequest) {
   );
 
   if (itemsError) {
-    return NextResponse.json({ error: "Could not create order items" }, { status: 500 });
+    console.error("order_items insert failed:", itemsError);
+    return NextResponse.json({ error: "Could not create order items", detail: itemsError.message }, { status: 500 });
   }
 
   const siteUrl = process.env.SITE_URL ?? new URL(request.url).origin;
