@@ -36,7 +36,7 @@ Cotton Cashmere + 9 shades + Silver Lining's two lots (10 + 5 = 15, verified). *
 
 ## Admin
 
-**8. Admin auth** ⬜ — Supabase Auth + role check (`profiles.role = 'admin'`) for Mandy.
+**8. Admin auth** 🟡 — Supabase Auth + role check (`profiles.role = 'admin'`) for Mandy. Backend prioritised ahead of frontend (steps 5-7 deferred). Added the missing `auth.users` → `profiles` sync trigger (`0003_auth_trigger.sql`) — without it, signups had no profiles row and `is_admin()` silently returned false. First admin account being set up for tungsuyin@gmail.com. Still needed: sign-in/sign-out server actions.
 **9. Product & stock management** ⬜ — CRUD for products/variants, dye-lot stock editing, image upload to Supabase Storage. Mine Shopify's product editor / variant table / inventory columns.
 **10. Orders / sales view** ⬜ — order list + basic sales figures.
 
