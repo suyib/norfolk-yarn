@@ -46,7 +46,8 @@ Cotton Cashmere + 9 shades + Silver Lining's two lots (10 + 5 = 15, verified). *
 
 ## Checkout & ship
 
-**11. Stripe Checkout (test mode)** ⬜ — hosted session + webhook that marks order paid and decrements a **specific dye lot** (`order_items.dye_lot_id` is the target). Parked for the real project: webhook hardening (idempotency via `orders.stripe_session_id`, edge cases) and EPOS/stock-system integration.
+**11. Stripe Checkout (test mode)** ✅ (backend) — `POST /api/checkout` (`src/app/api/checkout/route.ts`) allocates one dye lot per line item, creates a pending `orders`/`order_items` row via the service_role client, then a Stripe Checkout Session with `orderId` in metadata. `POST /api/webhooks/stripe` (`src/app/api/webhooks/stripe/route.ts`) verifies the signature, and on `checkout.session.completed` decrements the allocated lots and flips the order to `paid` — guarded by `order.status === 'pending'` so a redelivered webhook can't double-decrement. No cart UI yet (step 7), so this is only reachable via curl/Stripe CLI for now — see below for how to test it.
+- Parked for the real project: webhook hardening beyond the idempotency check already in place, cross-lot splitting when no single lot covers the quantity, and EPOS/stock-system integration.
 **12. Deploy & polish** ⬜ — enough breadth to feel real; smooth mobile checkout with a Stripe test card.
 
 ---
