@@ -1,49 +1,45 @@
-import { redirect } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { signOut, testAdminWrite } from "./actions";
+import { formatPrice } from "@/lib/format";
 
-export default async function AdminPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ testResult?: string; testError?: string }>;
-}) {
-  const { testResult, testError } = await searchParams;
-
+export default async function AdminDashboard() {
   const supabase = await createClient();
-  const { data: userData } = await supabase.auth.getUser();
-  if (!userData.user) redirect("/login");
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", userData.user.id)
-    .single();
+  const [{ data: paidOrders }, { count: productCount }] = await Promise.all([
+    supabase.from("orders").select("total_pennies").eq("status", "paid"),
+    supabase.from("products").select("id", { count: "exact", head: true }),
+  ]);
 
-  if (profile?.role !== "admin") {
-    redirect("/login?error=Signed+in,+but+that+account+isn't+an+admin");
-  }
+  const revenuePennies = (paidOrders ?? []).reduce((sum, o) => sum + o.total_pennies, 0);
+  const orderCount = paidOrders?.length ?? 0;
 
   return (
-    <div className="min-h-screen bg-background p-8 text-foreground">
-      <h1 className="text-2xl font-semibold text-forest">Admin</h1>
-      <p className="mt-1 text-sm text-heather">Signed in as {userData.user.email}</p>
+    <div className="flex flex-col gap-8">
+      <h1 className="font-heading text-2xl font-bold text-ink">Dashboard</h1>
 
-      <form action={testAdminWrite} className="mt-6">
-        <Button type="submit" variant="secondary">
-          Test admin write (is_admin() check)
-        </Button>
-      </form>
-      {testResult === "ok" && (
-        <p className="mt-2 text-sm text-forest">Write succeeded — is_admin() let it through.</p>
-      )}
-      {testError && <p className="mt-2 text-sm text-destructive">Write rejected: {testError}</p>}
+      <div className="grid grid-cols-3 gap-4">
+        <div className="rounded-2xl border border-mist bg-white p-6">
+          <p className="text-sm text-ink-muted">Revenue (paid)</p>
+          <p className="mt-2 text-3xl font-bold text-ink">{formatPrice(revenuePennies)}</p>
+        </div>
+        <div className="rounded-2xl border border-mist bg-white p-6">
+          <p className="text-sm text-ink-muted">Paid orders</p>
+          <p className="mt-2 text-3xl font-bold text-ink">{orderCount}</p>
+        </div>
+        <div className="rounded-2xl border border-mist bg-white p-6">
+          <p className="text-sm text-ink-muted">Products</p>
+          <p className="mt-2 text-3xl font-bold text-ink">{productCount ?? 0}</p>
+        </div>
+      </div>
 
-      <form action={signOut} className="mt-4">
-        <Button type="submit" variant="outline">
-          Sign out
-        </Button>
-      </form>
+      <div className="flex gap-4">
+        <Link href="/admin/products" className="rounded-full bg-forest px-5 py-2.5 font-bold text-mist">
+          Manage Products
+        </Link>
+        <Link href="/admin/orders" className="rounded-full border border-taupe px-5 py-2.5 font-bold text-ink">
+          View Orders
+        </Link>
+      </div>
     </div>
   );
 }
