@@ -1,13 +1,20 @@
 import type { Metadata } from "next";
-import { Geist_Mono } from "next/font/google";
+import { Abhaya_Libre, Josefin_Sans } from "next/font/google";
+import { CartProvider } from "@/components/cart/cart-context";
+import { Header } from "@/components/site/header";
+import { Footer } from "@/components/site/footer";
 import "./globals.css";
 
-// Sans/heading fonts (Sofia Pro, FreightBig Pro) are commercial and not
-// bundled yet — see the note in globals.css. Geist Mono is free and kept
-// for any monospace use (e.g. admin numeric displays).
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const josefinSans = Josefin_Sans({
+  variable: "--font-josefin-sans",
   subsets: ["latin"],
+  weight: ["400", "700"],
+});
+
+const abhayaLibre = Abhaya_Libre({
+  variable: "--font-abhaya-libre",
+  subsets: ["latin"],
+  weight: ["700"],
 });
 
 export const metadata: Metadata = {
@@ -21,8 +28,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistMono.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="en" className={`${josefinSans.variable} ${abhayaLibre.variable} h-full antialiased`}>
+      <body className="min-h-full flex flex-col">
+        <CartProvider>
+          <Header />
+          <main className="flex flex-1 flex-col">{children}</main>
+          <Footer />
+        </CartProvider>
+      </body>
     </html>
   );
 }

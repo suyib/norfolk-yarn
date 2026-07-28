@@ -34,9 +34,10 @@ Cotton Cashmere + 9 shades + Silver Lining's two lots (10 + 5 = 15, verified). *
 
 ## Storefront
 
-**5. PDP** ⬜ — swatch grid from `variants`, dye-lot panel from `dye_lots`, add-to-cart. Build first.
-**6. PLP + home** ⬜ — reuse PDP patterns + wireframes, mobile-first.
-**7. Cart** ⬜ — simple session/client cart; don't over-build.
+**5. PDP** ✅ — `src/app/products/[handle]/page.tsx` + `src/components/pdp/product-detail.tsx`. Real product/specs/variants/dye-lots from Supabase; colour swatch picker switches variant + price; a dye-lot note panel appears only when the selected variant has >1 lot (Silver Lining); stock summed from `dye_lots`, qty stepper capped at it; sticky bottom add-to-cart bar. "Recently Viewed" omitted — one product would just repeat itself.
+**6. PLP + home** ✅ — `src/app/shop/page.tsx` (flat product list — only one category exists, so no `/shop/[category]`) and `src/app/page.tsx` (hero, Summer Sale using real variants, decorative Workshops/Shop-by-Weight/Shop-by-Category tiles, Why Shop With Us). Design tokens corrected from Figma's actual PDP/PLP export: fonts are **Josefin Sans** + **Abhaya Libre** (both free Google Fonts via `next/font/google`) — not Sofia Pro/FreightBig Pro as first assumed from the manually-exported homepage HTML — fully resolving the font-licensing gap. Added `--color-evergreen` (`#9CC0B0`), the one new colour the PDP/PLP export surfaced. Icons sourced from `iconoir-react` (matches the Figma layer names, e.g. `icon/iconoir/plus`) rather than hand-drawn SVGs.
+**7. Cart** ✅ — `src/components/cart/cart-context.tsx`: basket + "saved for later", persisted to `localStorage` (confirmed with the user over a server-side session table — kept it pure client-side, no new schema/API surface). `src/app/cart/page.tsx` wires Checkout to the existing `/api/checkout`, redirecting to the real Stripe session URL. `src/app/checkout/{success,cancelled}/page.tsx` fix the 404 hit earlier when testing the webhook — success clears the cart, cancelled leaves it intact.
+- Known gap: the Norfolk Yarn logo is real brand artwork that couldn't be fetched from Figma (the exported asset URLs are the user's local Figma desktop app dev server, unreachable here) — using a text wordmark placeholder until the real logo file is provided.
 
 ## Admin
 
