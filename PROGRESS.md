@@ -40,9 +40,9 @@ Cotton Cashmere + 9 shades + Silver Lining's two lots (10 + 5 = 15, verified). *
 
 ## Admin
 
-**8. Admin auth** 🟡 — Supabase Auth + role check (`profiles.role = 'admin'`) for Mandy. Backend prioritised ahead of frontend (steps 5-7 deferred). Added the missing `auth.users` → `profiles` sync trigger (`0003_auth_trigger.sql`) — without it, signups had no profiles row and `is_admin()` silently returned false. First admin account being set up for tungsuyin@gmail.com. Still needed: sign-in/sign-out server actions.
-**9. Product & stock management** ⬜ — CRUD for products/variants, dye-lot stock editing, image upload to Supabase Storage. Mine Shopify's product editor / variant table / inventory columns.
-**10. Orders / sales view** ⬜ — order list + basic sales figures.
+**8. Admin auth** ✅ (backend) — Supabase Auth + role check (`profiles.role = 'admin'`), admin account live for tungsuyin@gmail.com. `auth.users` → `profiles` sync trigger (`0003_auth_trigger.sql`) fixes the earlier gap where signups had no profiles row. `/login` + `/admin` (sign-in/out, an `is_admin()` write-test button) verified end-to-end against the live project: write succeeded as admin. Admin *panel* UI (beyond this bare-bones check) deferred alongside steps 5-7.
+**9. Product & stock management** ✅ (backend) — CRUD API routes under `src/app/api/admin/`: `products/` (list+create), `products/[id]/` (read/update/delete), `products/[id]/variants/` (create), `variants/[id]/` (update/delete), `variants/[id]/dye-lots/` (create/restock), `dye-lots/[id]/` (update qty or note, delete). No dedicated auth check in the route code — RLS's `is_admin()` is the actual gate, same pattern proven on the admin page. `0004_storage.sql` adds a public-read/admin-write `product-images` Storage bucket for step 9's eventual image upload. Admin UI (the product/variant table itself) deferred to frontend work.
+**10. Orders / sales view** ✅ (backend) — `GET /api/admin/orders` (list, newest first), `GET /api/admin/orders/[id]` (detail with items), `GET /api/admin/sales-summary` (paid order count + revenue in pennies). Same RLS-as-gate pattern; no page to view these yet.
 
 ## Checkout & ship
 
